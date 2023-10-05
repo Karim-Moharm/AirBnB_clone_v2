@@ -1,6 +1,5 @@
-
-eudo service nginx restart
-sre the web server
+#!/usr/bin/env bash
+# Prepare the web servers 
 
 sudo apt update
 sudo apt install nginx -y
@@ -32,9 +31,8 @@ LOCATION_BLOCK="\
 COMMENT
 
 # write at line 25 inside the server block
-sudo sed -i "25i \\\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n" /etc/nginx/sites-available/default
+sudo sed -i "25i \\\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n" "$CONFIG_PATH"
 
-sudo echo "$LOCATION_BLOCK" | sudo tee -a "$CONFIG_PATH"
+# sudo echo "$LOCATION_BLOCK" | sudo tee -a "$CONFIG_PATH"
 
 sudo service nginx restart
-udo service nginx restart
