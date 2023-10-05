@@ -3,7 +3,8 @@
 
 sudo apt update
 sudo apt install nginx -y
-sudo mkdir -p /data/web_static/{releases/test,shared}
+sudo mkdir -p /data/web_static/shared/
+sudo mkdir -p /data/web_static/releases/test/
 
 sudo echo "
         <html>
@@ -14,7 +15,7 @@ sudo echo "
             Hello friend
           </body>
         </html>
-" | sudo tee -a /data/web_static/releases/test/index.html
+" | sudo tee /data/web_static/releases/test/index.html
 
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 chown -R ubuntu:ubuntu /data
