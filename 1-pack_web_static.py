@@ -14,10 +14,13 @@ def do_pack():
 
     try:
         local("mkdir -p versions")
-        local("tar -czvf versions/{} versions".format(archieve_name))
+        result = local("tar -czvf versions/{} versions".format(archieve_name))
         file_size = os.path.getsize("versions/{}".format(archieve_name))
         print("web_static packed: versions/{} -> {}Bytes".format(archieve_name,
                                                                  file_size))
-        return f"services/{archieve_name}"
+        if result.succeeded:
+            return f"services/{archieve_name}"
+        else:
+            return None
     except Exception:
         return None
