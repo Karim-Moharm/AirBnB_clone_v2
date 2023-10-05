@@ -17,6 +17,4 @@ def do_pack():
 		file_size = os.path.getsize("versions/{}".format(archieve_name))
 		print("web_static packed: versions/{} -> {}Bytes".format(archieve_name, file_size))		
 	except:
-		return None
-		
-	
+		return None	
