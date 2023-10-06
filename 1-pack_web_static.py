@@ -19,7 +19,7 @@ def do_pack():
         print("web_static packed: versions/{} -> {}Bytes".format(archieve_name,
                                                                  file_size))
         if result.succeeded:
-            return f"services/{archieve_name}"
+            return f"versions/{archieve_name}"
         else:
             return None
     except Exception:
