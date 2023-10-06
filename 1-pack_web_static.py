@@ -14,7 +14,8 @@ def do_pack():
 
     try:
         local("mkdir -p versions")
-        result = local("tar -czvf versions/{} web_static".format(archieve_name))
+        result = local("tar -czvf versions/{} web_static".format(
+                        archieve_name))
         file_size = os.path.getsize("versions/{}".format(archieve_name))
         print("web_static packed: versions/{} -> {}Bytes".format(archieve_name,
                                                                  file_size))
