@@ -22,31 +22,34 @@ def do_pack():
         print("web_static packed: versions/{} -> {}Bytes".format(archieve_name,
                                                                  file_size))
         if result.succeeded:
-            return f"services/{archieve_name}"
+            return f"versions/{archieve_name}"
         else:
             return None
     except Exception:
         return None
 
+
 def do_deploy(archive_path):
     """script that distributes an archive to your web servers,
     using the function do_deploy
-    """ 
+    """
+    if not os.path.exists(archive_path):
+        return False
+
     # versions/file.tgz
-    file_name_without_ext = archive_path.split('/')[1].split('.')[0]
-    file_name_with_ext = archive_path.split('/')[1]
+    file_name_without_ext = archive_path.split('/')[-1].split('.')[0]
+    file_name_with_ext = archive_path.split('/')[-1]
     uncompress_path = '/data/web_static/releases/{}'\
                       .format(file_name_without_ext)
 
-    if os.path.exists(archive_path):
-        put(archive_path, '/tmp/')
-        run('tar -xvzf /tmp/{} -C {}'.format(
-            file_name_with_ext, uncompress_path))
-        run('rm /tmp/{}'.format(file_name_with_ext))
-        run('mv {}/web_static/* {}/'.format(uncompress_path, uncompress_path))
-        run('rm -rf {}/web_static'.format(uncompress_path))
+    put(archive_path, '/tmp/')
+    run('mkdir -p {}'.format(uncompress_path))
+    run('tar -xvzf /tmp/{} -C {}'.format(
+        file_name_with_ext, uncompress_path))
+    run('rm /tmp/{}'.format(file_name_with_ext))
+    run('mv {}/web_static/* {}/'.format(uncompress_path, uncompress_path))
+    run('rm -rf {}/web_static'.format(uncompress_path))
 
-        run('rm -rf /data/web_static/current')
-        run('ln -s {} /data/web_static/current'.format(uncompress_path))
-        return True
-    return False
+    run('rm -rf /data/web_static/current')
+    run('ln -s {} /data/web_static/current'.format(uncompress_path))
+    return True
