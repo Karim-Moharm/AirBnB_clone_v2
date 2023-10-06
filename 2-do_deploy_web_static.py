@@ -4,13 +4,14 @@
 import os
 form fabric.api import local, run, get, put
 
+env.hosts = ['100.25.23.34', '52.87.216.135']
+env.user = 'ubuntu'
+
 
 def do_deploy(archive_path):
     """script that distributes an archive to your web servers,
     using the function do_deploy
-    """
-    env.hosts = ['100.25.23.34', '52.87.216.135']
-    env.user = 'ubuntu'
+    """ 
     # versions/file.tgz
     file_name_without_ext = archive_path.split('/')[1].split('.')[0]
     file_name_with_ext = archive_path.split('/')[1]
