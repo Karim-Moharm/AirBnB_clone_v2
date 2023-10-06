@@ -2,7 +2,7 @@
 """script used to Deploy archive
 """
 import os
-from fabric.api import local, run, get, env
+from fabric.api import *
 from datetime import datetime
 
 env.hosts = ['100.25.23.34', '52.87.216.135']
@@ -17,7 +17,7 @@ def do_pack():
 
     try:
         local("mkdir -p versions")
-        result = local("tar -czvf versions/{} versions".format(archieve_name))
+        result = local("tar -czvf versions/{} web_static".format(archieve_name))
         file_size = os.path.getsize("versions/{}".format(archieve_name))
         print("web_static packed: versions/{} -> {}Bytes".format(archieve_name,
                                                                  file_size))
@@ -37,22 +37,40 @@ def do_deploy(archive_path):
         return False
 
     # versions/file.tgz
-    try:
-        file_name_without_ext = archive_path.split('/')[-1].split('.')[0]
-        file_name_with_ext = archive_path.split('/')[-1]
-        uncompress_path = '/data/web_static/releases/{}'\
-                          .format(file_name_without_ext)
+    file_name_without_ext = archive_path.split('/')[-1].split('.')[0]
+    file_name_with_ext = archive_path.split('/')[-1]
+    uncompress_path = '/data/web_static/releases/{}'\
+                      .format(file_name_without_ext)
 
-        put(archive_path, '/tmp/')
-        run('mkdir -p {}'.format(uncompress_path))
-        run('tar -xvzf /tmp/{} -C {}'.format(
-            file_name_with_ext, uncompress_path))
-        run('rm /tmp/{}'.format(file_name_with_ext))
-        run('mv {}/web_static/* {}/'.format(uncompress_path, uncompress_path))
-        run('rm -rf {}/web_static'.format(uncompress_path))
-
-        run('rm -rf /data/web_static/current')
-        run('ln -s {} /data/web_static/current'.format(uncompress_path))
-        return True
-    except Exception:
+    put(archive_path, '/tmp/')
+    result = run('mkdir -p {}'.format(uncompress_path))
+    if result.failed:
         return False
+
+    result = run('tar -xvzf /tmp/{} -C {}'.format(
+                  file_name_with_ext, uncompress_path))
+    if result.failed:
+        return False
+
+    result = run('rm /tmp/{}'.format(file_name_with_ext))
+    if result.failed:
+        return False
+
+    result = run('mv {}/web_static/* {}/'.format(
+                 uncompress_path, uncompress_path))
+    if result.failed:
+        return False
+
+    result = run('rm -rf {}/web_static'.format(uncompress_path))
+    if result.failed:
+        return False
+
+    result = run('rm -rf /data/web_static/current')
+    if result.failed:
+        return False
+
+    result = run('ln -sf {} /data/web_static/current'.format(uncompress_path))
+    if result.failed:
+        return False
+
+    return True
