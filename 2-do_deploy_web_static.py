@@ -2,7 +2,7 @@
 """script used to Deploy archive
 """
 import os
-from fabric.api import local, put, run, env 
+from fabric.api import local, put, run, env
 
 env.hosts = ['100.25.23.34', '52.87.216.135']
 env.user = 'ubuntu'
@@ -18,7 +18,8 @@ def do_deploy(archive_path):
     # versions/file.tgz
     file_name_without_ext = archive_path.split('/')[-1].split('.')[0]
     file_name_with_ext = archive_path.split('/')[-1]
-    uncompress_path = '/data/web_static/releases/{}'\
+
+    uncompress_path = '/data/web_static/releases/{}/'\
                       .format(file_name_without_ext)
 
     put(archive_path, '/tmp/')
@@ -35,7 +36,7 @@ def do_deploy(archive_path):
     if result.failed:
         return False
 
-    result = run('mv {}/web_static/* {}/'.format(
+    result = run('mv {}/web_static/* {}'.format(
                  uncompress_path, uncompress_path))
     if result.failed:
         return False
@@ -48,7 +49,7 @@ def do_deploy(archive_path):
     if result.failed:
         return False
 
-    result = run('ln -sf {} /data/web_static/current'.format(uncompress_path))
+    result = run('ln -s {} /data/web_static/current'.format(uncompress_path))
     if result.failed:
         return False
     print("New version deployed!")
