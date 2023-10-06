@@ -2,32 +2,10 @@
 """script used to Deploy archive
 """
 import os
-from fabric.api import *
-from datetime import datetime
+from fabric.api import local, put, run, env 
 
 env.hosts = ['100.25.23.34', '52.87.216.135']
 env.user = 'ubuntu'
-
-
-def do_pack():
-    """generates a .tgz archive from the contents of the web_static folder
-    """
-    formatted_dt = datetime.now().strftime("%Y%m%d%H%M%S")
-    archieve_name = "web_static_{}.tgz".format(formatted_dt)
-
-    try:
-        local("mkdir -p versions")
-        result = local("tar -czvf versions/{} web_static".format(
-                        archieve_name))
-        file_size = os.path.getsize("versions/{}".format(archieve_name))
-        print("web_static packed: versions/{} -> {}Bytes".format(archieve_name,
-                                                                 file_size))
-        if result.succeeded:
-            return f"versions/{archieve_name}"
-        else:
-            return None
-    except Exception:
-        return None
 
 
 def do_deploy(archive_path):
@@ -48,7 +26,7 @@ def do_deploy(archive_path):
     if result.failed:
         return False
 
-    result = run('tar -xvzf /tmp/{} -C {}'.format(
+    result = run('tar -xzf /tmp/{} -C {}'.format(
                   file_name_with_ext, uncompress_path))
     if result.failed:
         return False
@@ -73,5 +51,5 @@ def do_deploy(archive_path):
     result = run('ln -sf {} /data/web_static/current'.format(uncompress_path))
     if result.failed:
         return False
-
+    print("New version deployed!")
     return True
