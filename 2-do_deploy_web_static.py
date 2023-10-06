@@ -37,19 +37,22 @@ def do_deploy(archive_path):
         return False
 
     # versions/file.tgz
-    file_name_without_ext = archive_path.split('/')[-1].split('.')[0]
-    file_name_with_ext = archive_path.split('/')[-1]
-    uncompress_path = '/data/web_static/releases/{}'\
-                      .format(file_name_without_ext)
+    try:
+        file_name_without_ext = archive_path.split('/')[-1].split('.')[0]
+        file_name_with_ext = archive_path.split('/')[-1]
+        uncompress_path = '/data/web_static/releases/{}'\
+                          .format(file_name_without_ext)
 
-    put(archive_path, '/tmp/')
-    run('mkdir -p {}'.format(uncompress_path))
-    run('tar -xvzf /tmp/{} -C {}'.format(
-        file_name_with_ext, uncompress_path))
-    run('rm /tmp/{}'.format(file_name_with_ext))
-    run('mv {}/web_static/* {}/'.format(uncompress_path, uncompress_path))
-    run('rm -rf {}/web_static'.format(uncompress_path))
+        put(archive_path, '/tmp/')
+        run('mkdir -p {}'.format(uncompress_path))
+        run('tar -xvzf /tmp/{} -C {}'.format(
+            file_name_with_ext, uncompress_path))
+        run('rm /tmp/{}'.format(file_name_with_ext))
+        run('mv {}/web_static/* {}/'.format(uncompress_path, uncompress_path))
+        run('rm -rf {}/web_static'.format(uncompress_path))
 
-    run('rm -rf /data/web_static/current')
-    run('ln -s {} /data/web_static/current'.format(uncompress_path))
-    return True
+        run('rm -rf /data/web_static/current')
+        run('ln -s {} /data/web_static/current'.format(uncompress_path))
+        return True
+    except Exception:
+        return False
