@@ -15,15 +15,14 @@ def do_deploy(archive_path):
     file_name_without_ext = archive_path.split('/')[1].split('.')[0]
     file_name_with_ext = archive_path.split('/')[1]
     uncompress_path = '/data/web_static/releases/{}'\
-                        .format(file_name_without_ext)
+                      .format(file_name_without_ext)
 
     if os.path.exists(archive_path):
         put(archive_path, '/tmp/')
-        run('tar -xvzf /tmp/{} -C {}'\
-            .format(file_name_with_ext, uncompress_path))
+        run('tar -xvzf /tmp/{} -C {}'.format(
+            file_name_with_ext, uncompress_path))
         run('rm /tmp/{}'.format(file_name_with_ext))
         run('rm -f /data/web_static/current')
         run('ln -s {} /data/web_static/current'.format(uncompress_path))
         return True
-    
     return False
