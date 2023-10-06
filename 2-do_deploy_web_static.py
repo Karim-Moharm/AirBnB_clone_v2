@@ -2,7 +2,7 @@
 """script used to Deploy archive
 """
 import os
-form fabric.api import local, run, get, put
+from fabric.api import local, run, get, env
 
 env.hosts = ['100.25.23.34', '52.87.216.135']
 env.user = 'ubuntu'
@@ -23,7 +23,10 @@ def do_deploy(archive_path):
         run('tar -xvzf /tmp/{} -C {}'.format(
             file_name_with_ext, uncompress_path))
         run('rm /tmp/{}'.format(file_name_with_ext))
-        run('rm -f /data/web_static/current')
+        run('mv {}/web_static/* {}/'.format(uncompress_path, uncompress_path))
+        run('rm -rf {}/web_static'.format(uncompress_path))
+
+        run('rm -rf /data/web_static/current')
         run('ln -s {} /data/web_static/current'.format(uncompress_path))
         return True
     return False
