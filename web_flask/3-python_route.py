@@ -23,9 +23,17 @@ def display_hbnb():
 
 @app.route('/c/<text>', strict_slashes=False)
 def display_c(text):
-    """route function that displays c followed by some text
+    """route function that displays C followed by some text
     """
     return f"C {text}".replace("_", " ")
+
+
+@app.route('/python/<text>', strict_slashes=False)
+@app.route('/python', strict_slashes=False)
+def display_python(text="is cool"):
+    """route function that displays Python followed by some text
+    """
+    return f"Python {text}".replace("_", " ")
 
 
 if __name__ == '__main__':
