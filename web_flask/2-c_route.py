@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 
 @app.route('/', strict_slashes=False)
-def say_hello():
+def display_hello():
     """route function that displays Hello HBNB
     """
     return "Hello HBNB!"
@@ -16,9 +16,16 @@ def say_hello():
 
 @app.route('/hbnb', strict_slashes=False)
 def display_hbnb():
-    """route function to display HBNB
+    """route function that displays HBNB
     """
     return "HBNB"
+
+
+@app.route('/c/<text>')
+def display_test(text):
+    """route function that displays c followed by some text
+    """
+    return f"c {text}".replace("_", " ")
 
 
 if __name__ == '__main__':
