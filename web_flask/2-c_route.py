@@ -25,7 +25,7 @@ def display_hbnb():
 def display_test(text):
     """route function that displays c followed by some text
     """
-    return f"c {text}".replace("_", " ")
+    return f"C {text}".replace("_", " ")
 
 
 if __name__ == '__main__':
