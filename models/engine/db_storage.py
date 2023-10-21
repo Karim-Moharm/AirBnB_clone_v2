@@ -36,28 +36,33 @@ class DBStorage:
             bind=self.__engine, expire_on_commit=False)
         self.__session = scoped_session(session_factory)
 
-        # Session = sessionmaker(bind=self.__engine)
-        # self.__session = Session()
-        # metadata = MetaData(bind=self.__engine)
+        '''
+        Session = sessionmaker(bind=self.__engine)
+        self.__session = Session()
+        metadata = MetaData(bind=self.__engine)
 
-        # if os.getenv("HBNB_ENV") == "test":
-        #     metadata.drop_all()
-        #     self.__session.commit()
+        if os.getenv("HBNB_ENV") == "test":
+            metadata.drop_all()
+            self.__session.commit()
+        '''
 
     def all(self, cls=None):
         """query on the current database session (self.__session)
             all objects depending of the class name """
-        # if cls is None:
-        #     # query all objects
-        #     self.objs = self.__session.query(
-        #         our_models["City"]
-        #         # our_models["City"],
-        #         # our_models["State"],
-        #         # our_models["Place"],
-        #         # our_models["Review"],
-        #         # our_models["Amenity"]
-        #     ).all()
-        # else:
+
+        '''
+        if cls is None:
+            # query all objects
+            self.objs = self.__session.query(
+                our_models["City"]
+                # our_models["City"],
+                # our_models["State"],
+                # our_models["Place"],
+                # our_models["Review"],
+                # our_models["Amenity"]
+            ).all()
+        else:
+        '''
         if cls is None:
             objects = []
             for i in our_models.values():
