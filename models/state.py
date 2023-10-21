@@ -9,6 +9,7 @@ from models.city import City
 import os
 import models
 
+
 class State(BaseModel, Base):
     """sub class that inherit from BaseModel
     """
@@ -18,7 +19,7 @@ class State(BaseModel, Base):
         name = Column(String(128), nullable=False)
         # relationsip is one (State) to many (City)
         cities = relationship('City', backref='state',
-                            cascade="all, delete, save-update")
+                              cascade="all, delete, save-update")
     else:
         name = ""
         cities = ""
@@ -35,9 +36,9 @@ class State(BaseModel, Base):
             """
 
             from models import storage
-            lst = []
+            city_lst = []
 
             for city in storage.all(City).values():
                 if self.id == city.state_id:
-                    lst.append(city)
-            return lst
+                    city_lst.append(city)
+            return city_lst
