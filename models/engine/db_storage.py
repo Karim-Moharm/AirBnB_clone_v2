@@ -3,7 +3,6 @@
 """
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import sessionmaker, scoped_session
-from sqlalchemy.ext.declarative import declarative_base
 import os
 from models.all_models import our_models
 from models.base_model import BaseModel, Base
