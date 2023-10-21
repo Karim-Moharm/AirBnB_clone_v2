@@ -22,12 +22,11 @@ class State(BaseModel, Base):
                               cascade="all, delete, save-update")
     else:
         name = ""
-        cities = ""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    if (models.storage_type == "db"):
+    if (models.storage_type != "db"):
         @property
         def cities(self):
             """
@@ -35,10 +34,10 @@ class State(BaseModel, Base):
             with state_id equal to the current State.id
             """
 
-            from models import storage
+            # from models import storage
             city_lst = []
 
-            for city in storage.all(City).values():
+            for city in models.storage.all(City).values():
                 if self.id == city.state_id:
                     city_lst.append(city)
             return city_lst

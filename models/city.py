@@ -7,6 +7,7 @@ from sqlalchemy.orm import relationship
 from models.place import Place
 import models
 
+
 class City(BaseModel, Base):
     """sub class that inherit from BaseModel
     """
@@ -18,8 +19,9 @@ class City(BaseModel, Base):
         # state = relationship("State", back_populates="cities")
 
         places = relationship("Place", backref="cities",
-                            cascade="all, delete, save-update")
+                              cascade="all, delete, save-update")
     else:
+        state_id = ""
         name = ""
 
     def __init__(self, *args, **kwargs):
