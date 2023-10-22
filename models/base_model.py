@@ -71,14 +71,14 @@ class BaseModel:
         """returns a dictionary containing all keys/values
         of the instance
         """
-        class_name = self.__class__.__name__
-        self.created_at = self.created_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
-        self.updated_at = self.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
-        self.__dict__["__class__"] = class_name
-
-        if "_sa_instance_state" in self.__dict__.keys():
-            del self.__dict__["_sa_instance_state"]
-        return self.__dict__
+        _dict = {}
+        _dict = self.__dict__.copy()
+        _dict['__class__'] = (str(type(self)).split('.')[-1]
+                              ).split('\'')[0]
+        _dict['created_at'] = self.created_at.isoformat()
+        _dict['updated_at'] = self.updated_at.isoformat()
+        _dict.pop("_sa_instance_state", None)
+        return _dict
 
     def delete(self):
         """delete the current instance from the storage

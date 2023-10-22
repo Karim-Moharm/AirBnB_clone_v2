@@ -22,7 +22,8 @@ def display_states_data():
     """display List of states
     """
     state_values = storage.all(State).values()
-    return render_template('7-states_list.html', state_values=state_values, title='HBNB')
+    return render_template('7-states_list.html',
+                           state_values=state_values, title='HBNB')
 
 
 if __name__ == '__main__':

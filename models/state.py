@@ -32,7 +32,7 @@ class State(BaseModel, Base):
             with state_id equal to the current State.id
             """
 
-            # from models import storage
+            from models.city import City
             city_lst = []
 
             for city in models.storage.all(City).values():

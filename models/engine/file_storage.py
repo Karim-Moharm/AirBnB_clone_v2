@@ -20,14 +20,14 @@ class FileStorage:
         """returns the dictionary objects or list of objects
         of one type of class if cls is not None
         """
-        if cls is not None:
-            obj = {}
+        filtered_obj = {}
+        if cls is None:
+            return self.__objects
+        else:
             for key, value in self.__objects.items():
-                class_name, obj_id = key.split('.')
-                if class_name == cls.__name__:
-                    obj[key] = value
-            self.__objects = obj
-        return self.__objects
+                if isinstance(value, cls):
+                    filtered_obj[key] = value
+        return filtered_obj
 
     def new(self, obj):
         """sets in objects attribute the obj
