@@ -5,6 +5,7 @@
 # from models.all_models import our_models
 import json
 
+
 class FileStorage:
     """class sued for serialization and deserialization
 
@@ -51,8 +52,6 @@ class FileStorage:
         """method used for converting JSON strign into
         python object (deserialize)
         """
-        def reload(self):
-        """Loads storage dictionary from file"""
         from models.base_model import BaseModel
         from models.user import User
         from models.place import Place
@@ -62,10 +61,10 @@ class FileStorage:
         from models.review import Review
 
         classes = {
-                    'BaseModel': BaseModel, 'User': User, 'Place': Place,
-                    'State': State, 'City': City, 'Amenity': Amenity,
-                    'Review': Review
-                }
+            'BaseModel': BaseModel, 'User': User, 'Place': Place,
+            'State': State, 'City': City, 'Amenity': Amenity,
+            'Review': Review
+        }
         try:
             with open(self.__file_path, mode='r') as fp:
                 data = json.load(fp)
