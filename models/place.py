@@ -6,9 +6,8 @@ from sqlalchemy import Column, Integer, String, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from models.review import Review
 import os
-import models
 
-if (models.storage_type == "db"):
+if os.getenv('HBNB_TYPE_STORAGE') == 'db':
     place_amenity = Table(
         'place_amenity', Base.metadata,
         Column("place_id", String(60), ForeignKey("places.id"),
@@ -21,7 +20,7 @@ if (models.storage_type == "db"):
 class Place(BaseModel, Base):
     """sub class that inherit from BaseModel
     """
-    if (models.storage_type == "db"):
+    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
         __tablename__ = "places"
 
         city_id = Column(String(60), ForeignKey(

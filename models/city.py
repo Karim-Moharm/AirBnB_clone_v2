@@ -5,20 +5,20 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from models.place import Place
-import models
+import os
 
 
 class City(BaseModel, Base):
     """sub class that inherit from BaseModel
     """
-    if (models.storage_type == "db"):
+    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
         __tablename__ = "cities"
         name = Column(String(128), nullable=False)
         state_id = Column(String(60), ForeignKey(
             "states.id", ondelete="CASCADE", onupdate="CASCADE"), nullable=False)
         # state = relationship("State", back_populates="cities")
 
-        places = relationship("Place", backref="cities") 
+        places = relationship("Place", backref="cities")
     else:
         state_id = ""
         name = ""

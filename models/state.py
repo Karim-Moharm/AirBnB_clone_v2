@@ -12,7 +12,7 @@ import models
 class State(BaseModel, Base):
     """sub class that inherit from BaseModel
     """
-    if (models.storage_type == "db"):
+    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
         __tablename__ = "states"
 
         name = Column(String(128), nullable=False)
@@ -24,7 +24,7 @@ class State(BaseModel, Base):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    if (models.storage_type != "db"):
+    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
         @property
         def cities(self):
             """

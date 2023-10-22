@@ -5,14 +5,13 @@ from models.base_model import BaseModel
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
-import models
-
+import os
 
 
 class Amenity(BaseModel, Base):
     """sub class that inherit from BaseModel
     """
-    if (models.storage_type == "db"):
+    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
         from models.place import place_amenity
         __tablename__ = "amenities"
         name = Column(String(128), nullable=False)
