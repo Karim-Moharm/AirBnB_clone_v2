@@ -3,24 +3,22 @@
 """
 from models.base_model import BaseModel, Base, Column, String
 from sqlalchemy.orm import relationship
-from models.review import Review
-from models.place import Place
-import models
+import os
 
 
 class User(BaseModel, Base):
     """sub class that inherit from BaseModel
     """
-    if (models.storage_type == "db"):
+    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
         __tablename__ = "users"
         email = Column(String(128), nullable=False)
         password = Column(String(128), nullable=False)
         first_name = Column(String(128), nullable=False)
         last_name = Column(String(128), nullable=False)
         reviews = relationship('Review', backref='user',
-                            cascade="all, delete, save-update")
+                               cascade="all, delete, save-update")
         places = relationship("Place", backref="user",
-                            cascade="all, delete, save-update")
+                              cascade="all, delete, save-update")
     else:
         email = ""
         password = ""
