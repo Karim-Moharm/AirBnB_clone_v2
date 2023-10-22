@@ -73,7 +73,7 @@ class FileStorage:
                     # obj = our_models[class_name](**value)
                     # self.__objects[key] = obj
                     # self.__objects[key] = BaseModel(**value)
-                    self.all()[key] = classes[value['__class__']](**val)
+                    self.all()[key] = classes[value['__class__']](**value)
         except:
             pass
 
