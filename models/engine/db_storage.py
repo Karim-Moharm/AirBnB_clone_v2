@@ -64,11 +64,9 @@ class DBStorage:
                 objs += self.__session.query(_cls)
 
         new_dict = {}
-
         for obj in objs:
             key = '{}.{}'.format(type(obj).__name__, obj.id)
             new_dict[key] = obj
-
         return new_dict
 
     def new(self, obj):
