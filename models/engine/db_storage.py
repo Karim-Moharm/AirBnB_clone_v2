@@ -1,11 +1,17 @@
 #!/usr/bin/python3
 """New engine for database
 """
-from sqlalchemy import create_engine, MetaData
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 import os
 from models.all_models import our_models
 from models.base_model import BaseModel, Base
+# from models.user import User
+# from models.place import Place
+# from models.state import State
+# from models.city import City
+# from models.amenity import Amenity
+# from models.review import Review
 
 
 class DBStorage:
@@ -17,23 +23,23 @@ class DBStorage:
     def __init__(self):
         """init special method
         """
-        self.user = os.getenv("HBNB_MYSQL_USER")
-        self.passwd = os.getenv("HBNB_MYSQL_PWD")
-        self.host = os.getenv("HBNB_MYSQL_HOST")
-        self.db = os.getenv("HBNB_MYSQL_DB")
+        user = os.getenv("HBNB_MYSQL_USER")
+        passwd = os.getenv("HBNB_MYSQL_PWD")
+        host = os.getenv("HBNB_MYSQL_HOST")
+        db = os.getenv("HBNB_MYSQL_DB")
 
         self.__engine = create_engine(
             "mysql+mysqldb://{}:{}@{}/{}".
-            format(self.user, self.passwd, self.host, self.db),
+            format(user, passwd, host, db),
             pool_pre_ping=True)
 
         if os.getenv('HBNB_ENV') == 'test':
             Base.metadata.drop_all(self.__engine)
 
         # Create the current database session with expire_on_commit=False
-        session_factory = sessionmaker(
-            bind=self.__engine, expire_on_commit=False)
-        self.__session = scoped_session(session_factory)
+        # session_factory = sessionmaker(
+        #     bind=self.__engine, expire_on_commit=False)
+        # self.__session = scoped_session(session_factory)
 
         '''
         Session = sessionmaker(bind=self.__engine)
@@ -49,31 +55,21 @@ class DBStorage:
         """query on the current database session (self.__session)
             all objects depending of the class name """
 
-        '''
-        if cls is None:
-            # query all objects
-            self.objs = self.__session.query(
-                our_models["City"]
-                # our_models["City"],
-                # our_models["State"],
-                # our_models["Place"],
-                # our_models["Review"],
-                # our_models["Amenity"]
-            ).all()
+        if cls is not None:
+            objs = self.__session.query(cls).all()
+
         else:
-        '''
-        if cls is None:
-            objects = []
-            for i in our_models.values():
-                if (i == BaseModel):
-                    continue
-                # print(i)
-                objects.extend(self.__session.query(i).all())
-                # obj = self.__session.query(i).all()
-                # objects.append(obj)
-        else:
-            objects = self.__session.query(cls).all()
-        return {f"{obj.__class__.__name__}.{obj.id}": obj for obj in objects}
+            objs = []
+            for _cls in our_models.values():
+                objs += self.__session.query(_cls)
+
+        new_dict = {}
+
+        for obj in objs:
+            key = '{}.{}'.format(type(obj).__name__, obj.id)
+            new_dict[key] = obj
+
+        return new_dict
 
     def new(self, obj):
         """add the object to the current database session"""
@@ -95,7 +91,8 @@ class DBStorage:
         # Create a session with the specified options
         session_factory = sessionmaker(
             bind=self.__engine, expire_on_commit=False)
-        self.__session = scoped_session(session_factory)
+        Session = scoped_session(session_factory)
+        self.__session = Session()
 
     def close(self):
         """call remove method on the private session attribute
