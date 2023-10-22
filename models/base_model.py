@@ -2,11 +2,14 @@
 """module has BaseModule"""
 import uuid
 from datetime import datetime
-import models
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+import os
 
-if (models.storage_type == "db"):
+
+storage_type = os.getenv("HBNB_TYPE_STORAGE")
+
+if (storage_type == "db"):
     Base = declarative_base()
 else:
     Base = object
@@ -16,7 +19,7 @@ class BaseModel:
     """BaseModel that defines all common attributes/methods
     for other classes
     """
-    if (models.storage_type == "db"):
+    if (storage_type == "db"):
         id = Column(String(60), unique=True, primary_key=True, nullable=False)
         created_at = Column(DateTime, nullable=False,
                             default=datetime.utcnow())
@@ -59,9 +62,10 @@ class BaseModel:
         """updates the public instance attribute updated_at
         with the current datetime
         """
+        from models import storage
         self.updated_at = datetime.now()
-        models.storage.new(self)
-        models.storage.save()
+        storage.new(self)
+        storage.save()
 
     def to_dict(self):
         """returns a dictionary containing all keys/values
@@ -79,4 +83,5 @@ class BaseModel:
     def delete(self):
         """delete the current instance from the storage
         """
-        models.storage.delete(self)
+        from models import storage
+        storage.delete(self)

@@ -2,9 +2,8 @@
 """Storage module for storing the date as JSON format
 """
 
-from models.all_models import our_models
+# from models.all_models import our_models
 import json
-
 
 class FileStorage:
     """class sued for serialization and deserialization
@@ -52,15 +51,31 @@ class FileStorage:
         """method used for converting JSON strign into
         python object (deserialize)
         """
+        def reload(self):
+        """Loads storage dictionary from file"""
+        from models.base_model import BaseModel
+        from models.user import User
+        from models.place import Place
+        from models.state import State
+        from models.city import City
+        from models.amenity import Amenity
+        from models.review import Review
+
+        classes = {
+                    'BaseModel': BaseModel, 'User': User, 'Place': Place,
+                    'State': State, 'City': City, 'Amenity': Amenity,
+                    'Review': Review
+                }
         try:
-            with open(self.__file_path, mode='r', encoding='utf-8') as fp:
+            with open(self.__file_path, mode='r') as fp:
                 data = json.load(fp)
                 for key, value in data.items():
-                    class_name, obj_id = key.split('.')
-                    obj = our_models[class_name](**value)
-                    self.__objects[key] = obj
+                    # class_name, obj_id = key.split('.')
+                    # obj = our_models[class_name](**value)
+                    # self.__objects[key] = obj
                     # self.__objects[key] = BaseModel(**value)
-        except FileNotFoundError:
+                    self.all()[key] = classes[value['__class__']](**val)
+        except:
             pass
 
     def delete(self, obj=None):
