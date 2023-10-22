@@ -7,6 +7,7 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 import os
 import models
+from models.city import City
 
 
 class State(BaseModel, Base):
@@ -24,15 +25,13 @@ class State(BaseModel, Base):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+    if os.getenv('HBNB_TYPE_STORAGE') != 'db':
         @property
         def cities(self):
             """
             Getter attribute that returns a list of City instances
             with state_id equal to the current State.id
             """
-
-            from models.city import City
             city_lst = []
 
             for city in models.storage.all(City).values():
