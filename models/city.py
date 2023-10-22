@@ -18,8 +18,7 @@ class City(BaseModel, Base):
             "states.id", ondelete="CASCADE", onupdate="CASCADE"), nullable=False)
         # state = relationship("State", back_populates="cities")
 
-        places = relationship("Place", backref="cities",
-                              cascade="all, delete, save-update")
+        places = relationship("Place", backref="cities") 
     else:
         state_id = ""
         name = ""

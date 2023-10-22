@@ -5,7 +5,6 @@ from models.base_model import BaseModel, Base
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-from models.city import City
 import os
 import models
 
@@ -18,8 +17,7 @@ class State(BaseModel, Base):
 
         name = Column(String(128), nullable=False)
         # relationsip is one (State) to many (City)
-        cities = relationship('City', backref='state',
-                              cascade="all, delete, save-update")
+        cities = relationship('City', backref='state')
     else:
         name = ""
 
